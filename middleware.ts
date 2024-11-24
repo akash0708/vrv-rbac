@@ -1,26 +1,43 @@
 import { withAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
 
-// Define the middleware function
 export default withAuth(
   async function middleware(request) {
-    // Access the token in the authorized callback to ensure it's correct
     console.log(request.nextUrl.pathname); // Logs the requested path
 
-    // You don't need to manually access `request.nextauth.token` here
-    // The logic for authorization is handled in the callback function
+    // if (
+    //   request.nextUrl.pathname.startsWith("/login") ||
+    //   request.nextUrl.pathname.startsWith("/signup")
+    // ) {
+    //   const redirectUrl = request.headers.get("referer") || "/";
+    //   return NextResponse.redirect(new URL(redirectUrl, request.url));
+    // }
+
+    if (request.nextUrl.pathname.startsWith("/admin")) {
+      if (
+        request.nextauth.token?.role !== "ADMIN" &&
+        request.nextauth.token?.role !== "SUPERADMIN"
+      ) {
+        return NextResponse.rewrite(new URL("/", request.url));
+        // console.log(request.nextauth.token?.role);
+      }
+    }
+
+    if (request.nextUrl.pathname.startsWith("/superadmin")) {
+      if (request.nextauth.token?.role !== "SUPERADMIN") {
+        console.log(request.nextauth.token?.role);
+        console.log(request.nextUrl.pathname);
+        return NextResponse.rewrite(new URL("/", request.url));
+      }
+    }
   },
   {
     callbacks: {
-      // Ensure the user has 'ADMIN' or 'superadmin' role to access this route
-      authorized: ({ token }) => {
-        // Check if the token's role is either 'ADMIN' or 'superadmin'
-        return token?.role === "ADMIN" || token?.role === "SUPERADMIN";
-      },
+      authorized: ({ token }) => !!token,
     },
   }
 );
 
-// Specify the matcher to apply this middleware to the '/admin' route
 export const config = {
-  matcher: ["/admin"],
+  matcher: ["/admin", "/superadmin"],
 };
