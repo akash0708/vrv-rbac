@@ -2,13 +2,22 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-import LogoutButton from "@/components/LogoutButton";
+import Profile from "@/components/Profile";
+import prisma from "@/lib/prisma";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
-  console.log(session);
 
   if (!session) {
+    redirect("/auth/login");
+  }
+
+  // Fetch full user data from the database
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) {
     redirect("/auth/login");
   }
 
@@ -18,7 +27,16 @@ export default async function DashboardPage() {
       <p className="text-gray-600">
         You are logged in as {session.user?.email}
       </p>
-      <LogoutButton />
+
+      <Profile
+        user={{
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          createdAt: user.createdAt.toISOString(),
+          updatedAt: user.updatedAt.toISOString(),
+        }}
+      />
     </div>
   );
 }

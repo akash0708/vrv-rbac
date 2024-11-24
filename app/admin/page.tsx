@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 const Admin = () => {
   const [registrations, setRegistrations] = useState([]);
@@ -76,9 +76,7 @@ const Admin = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Registrations
-            </CardTitle>
+            <CardTitle>Total Registrations</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalCount}</div>
@@ -88,9 +86,7 @@ const Admin = () => {
         {perEventCounts.map((event) => (
           <Card key={event.eventName}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {event.eventName}
-              </CardTitle>
+              <CardTitle>{event.eventName}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{event._count.eventName}</div>
@@ -109,8 +105,8 @@ const Admin = () => {
               <TableHead>Email</TableHead>
               <TableHead>Event Name</TableHead>
               <TableHead>Event Status</TableHead>
-              <TableHead>Timestamp</TableHead>
               <TableHead>Actions</TableHead>
+              <TableHead>Timestamp</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -120,7 +116,17 @@ const Admin = () => {
                 <TableCell>{reg.user.name}</TableCell>
                 <TableCell>{reg.user.email}</TableCell>
                 <TableCell>{reg.eventName}</TableCell>
-                <TableCell>{reg.status}</TableCell>
+                <TableCell>
+                  {reg.status === "PENDING" && (
+                    <Badge className="bg-yellow-600">Pending</Badge>
+                  )}
+                  {reg.status === "APPROVED" && (
+                    <Badge className="bg-emerald-700">Approved</Badge>
+                  )}
+                  {reg.status === "REJECTED" && (
+                    <Badge variant={"destructive"}>Rejected</Badge>
+                  )}
+                </TableCell>
                 <TableCell>
                   {reg.status === "PENDING" && (
                     <>
