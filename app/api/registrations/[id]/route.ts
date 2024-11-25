@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/authOptions";
 
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -20,7 +20,7 @@ export async function PUT(
       );
     }
 
-    const id = await context.params?.id;
+    const id = parseInt(await params.id);
 
     if (!id) {
       return NextResponse.json(
