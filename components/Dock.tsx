@@ -37,7 +37,7 @@ export default function FloatingDockDemo() {
     },
   ];
   return (
-    <div className="fixed bottom-20 z-50 mx-auto flex items-center justify-center h-fit w-screen">
+    <div className="fixed bottom-12 z-50 mx-auto flex items-center justify-center h-fit w-screen">
       <FloatingDock mobileClassName="" items={links} />
     </div>
   );

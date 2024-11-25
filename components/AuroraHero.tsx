@@ -11,11 +11,14 @@ import { ArrowRight } from "lucide-react";
 import { StarsBackground } from "./ui/stars-background";
 import { ShootingStars } from "./ui/shooting-stars";
 import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const COLORS_TOP = ["#13FFAA", "#1E67C6", "#CE84CF", "#DD335C"];
 
 export const AuroraHero = () => {
   const color = useMotionValue(COLORS_TOP[0]);
+
+  const { data: session } = useSession();
 
   useEffect(() => {
     animate(color, COLORS_TOP, {
@@ -44,7 +47,7 @@ export const AuroraHero = () => {
         <h1 className="max-w-3xl bg-gradient-to-br from-white to-gray-400 bg-clip-text text-center text-3xl font-medium leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
           The Ultimate RBAC Solution
         </h1>
-        <p className="my-6 max-w-xl text-center text-base leading-relaxed md:text-lg md:leading-relaxed">
+        <p className="my-6 max-w-xl text-center text-base font-thin leading-relaxed md:text-lg md:leading-relaxed">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae, et,
           distinctio eum impedit nihil ipsum modi.
         </p>
@@ -59,10 +62,10 @@ export const AuroraHero = () => {
           whileTap={{
             scale: 0.985,
           }}
-          className="group relative flex w-fit items-center gap-1.5 rounded-full bg-gray-950/10 px-4 py-2 text-gray-50 transition-colors hover:bg-gray-950/50"
-          onClick={() => redirect("/signup")}
+          className="group relative flex w-fit items-center gap-1.5 rounded-full bg-gray-950/10 px-4 py-2 mt-2 text-gray-50 transition-colors hover:bg-gray-950/50"
+          onClick={() => redirect(session ? "/register" : "/signup")}
         >
-          Sign Up Now
+          {session ? "Register Now" : "Sign Up Now"}
           <ArrowRight className="transition-transform group-hover:-rotate-45 group-active:-rotate-12" />
         </motion.button>
       </div>
