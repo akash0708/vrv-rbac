@@ -1,13 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
-// PUT: Update registration status
 export async function PUT(
   req: NextRequest,
   context: { params: { id: string } }
 ) {
   try {
-    // Ensure params.id is properly extracted
+    const session = await getServerSession(authOptions);
+
+    if (!session || !["ADMIN", "SUPERADMIN"].includes(session.user.role)) {
+      return NextResponse.json(
+        {
+          error:
+            "Unauthorized: Only admins or superadmins can update registration",
+        },
+        { status: 403 }
+      );
+    }
+
     const id = await context.params?.id;
 
     if (!id) {
@@ -17,11 +29,9 @@ export async function PUT(
       );
     }
 
-    // Parse the request body
     const body = await req.json();
     const { status } = body;
 
-    // Validate the status value
     if (!["APPROVED", "REJECTED"].includes(status)) {
       return NextResponse.json(
         { error: "Invalid status value" },
@@ -29,7 +39,6 @@ export async function PUT(
       );
     }
 
-    // Update the registration in the database
     const updatedRegistration = await prisma.registration.update({
       where: { id: Number(id) },
       data: { status },
@@ -43,7 +52,7 @@ export async function PUT(
         },
       },
     });
-    console.log(updatedRegistration);
+    // console.log(updatedRegistration);
     return NextResponse.json(updatedRegistration);
   } catch (error) {
     console.error("Error updating registration:", error);

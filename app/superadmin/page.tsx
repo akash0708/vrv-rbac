@@ -88,7 +88,6 @@ const SuperAdminPage: React.FC = () => {
       body: JSON.stringify({ isBlocked }),
     });
 
-    // Refresh user list
     setUsers(
       users.map((user) => (user.id === id ? { ...user, isBlocked } : user))
     );
