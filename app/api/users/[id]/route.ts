@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/authOptions";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
 
@@ -17,7 +17,7 @@ export async function DELETE(
   }
 
   const userToDelete = await prisma.user.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { id: parseInt((await params).id) },
   });
 
   if (userToDelete?.role === "SUPERADMIN") {
@@ -28,7 +28,7 @@ export async function DELETE(
   }
 
   await prisma.user.delete({
-    where: { id: parseInt(params.id) },
+    where: { id: parseInt((await params).id) },
   });
 
   return NextResponse.json({ message: "User deleted successfully" });

@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/authOptions";
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
 
@@ -21,7 +21,7 @@ export async function PUT(
   console.log("newRole", newRole);
 
   const updatedUser = await prisma.user.update({
-    where: { id: parseInt(await params.id) },
+    where: { id: parseInt((await params).id) },
     data: { role: newRole },
   });
 
