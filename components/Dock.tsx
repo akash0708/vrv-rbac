@@ -1,9 +1,13 @@
-import React from "react";
+"use client";
+
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { HomeIcon, NotebookPen, UserRound } from "lucide-react";
 import LogoutButton from "./LogoutButton";
+import { useSession } from "next-auth/react";
 
 export default function FloatingDockDemo() {
+  const { data: session } = useSession();
+  if (!session) return null;
   const links = [
     {
       title: "Home",
