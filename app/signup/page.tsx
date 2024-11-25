@@ -1,8 +1,23 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 "use client";
 
 import { useState } from "react";
-import { redirect, useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import BeamsWithCollision from "@/components/CollidingBeams";
+import Link from "next/link";
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
@@ -16,7 +31,6 @@ export default function SignUpPage() {
     setError("");
 
     try {
-      // Call the signup API
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -29,7 +43,6 @@ export default function SignUpPage() {
         return;
       }
 
-      // Automatically sign in the user after successful signup
       const result = await signIn("credentials", {
         email,
         password,
@@ -41,46 +54,76 @@ export default function SignUpPage() {
         return;
       }
 
-      // Redirect to the dashboard
       router.push("/dashboard");
     } catch (err) {
+      console.log(err);
       setError("Something went wrong!");
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded">
-        <h1 className="text-xl font-bold mb-4">Sign Up</h1>
-        {error && <p className="text-red-500 mb-2">{error}</p>}
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="border mb-3 p-2 w-full"
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border mb-3 p-2 w-full"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border mb-3 p-2 w-full"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          Sign Up
-        </button>
-      </form>
+    <div className="flex h-screen">
+      <div className="hidden w-1/2 lg:block">
+        <div className="flex h-full items-center justify-center">
+          <BeamsWithCollision />
+        </div>
+      </div>
+      <div className="flex w-full items-center justify-center lg:w-1/2">
+        <Card className="w-[350px]">
+          <CardHeader>
+            <CardTitle>Sign Up</CardTitle>
+            <CardDescription>
+              Create your account to get started
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {error && <p className="text-sm text-red-500">{error}</p>}
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Enter your name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                Sign Up
+              </Button>
+            </form>
+          </CardContent>
+          <CardFooter className="flex justify-end">
+            <Link
+              href="/login"
+              className="text-violet-500 text-sm font-thin underline"
+            >
+              Login
+            </Link>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   );
 }

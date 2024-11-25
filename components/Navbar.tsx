@@ -3,6 +3,7 @@ import { ModeToggle } from "./ui/mode-toggle";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import LogoutButton from "./LogoutButton";
+import { Button } from "./ui/button";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -19,12 +20,9 @@ const Navbar = async () => {
         ) : (
           <>
             <Link href="/login">Login</Link>
-            <Link
-              href="/signup"
-              className="text-white bg-[#7848F4] px-4 py-2 rounded-lg"
-            >
-              Signup
-            </Link>
+            <Button asChild>
+              <Link href="/signup">Signup</Link>
+            </Button>
           </>
         )}
 

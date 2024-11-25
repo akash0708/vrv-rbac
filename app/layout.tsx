@@ -3,7 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionWrapper from "@/components/SessionWrapper";
-import Navbar from "@/components/Navbar";
+import FloatingDockDemo from "@/components/Dock";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,8 +39,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SessionWrapper>
-            <Navbar />
+            <FloatingDockDemo />
             {children}
+            <Toaster />
           </SessionWrapper>
         </ThemeProvider>
       </body>

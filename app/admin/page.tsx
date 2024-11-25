@@ -13,11 +13,32 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-const Admin = () => {
-  const [registrations, setRegistrations] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [perEventCounts, setPerEventCounts] = useState([]);
-  const [loading, setLoading] = useState(true);
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+interface Registration {
+  id: string;
+  user: User;
+  eventName: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  createdAt: string;
+}
+
+interface EventCount {
+  eventName: string;
+  _count: {
+    eventName: number;
+  };
+}
+
+const Admin: React.FC = () => {
+  const [registrations, setRegistrations] = useState<Registration[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [perEventCounts, setPerEventCounts] = useState<EventCount[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchRegistrations = async () => {
@@ -42,7 +63,10 @@ const Admin = () => {
   }, []);
   console.log("registrations", registrations);
 
-  const handleStatusChange = async (id, status) => {
+  const handleStatusChange = async (
+    id: string,
+    status: "APPROVED" | "REJECTED"
+  ) => {
     try {
       const res = await fetch(`/api/registrations/${id}`, {
         method: "PUT",
@@ -72,7 +96,9 @@ const Admin = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-extrabold mb-6">Admin Page</h1>
+      <h1 className="max-w-3xl mb-4 bg-gradient-to-br from-white to-gray-400 bg-clip-text text-3xl font-medium leading-tight text-transparent sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight">
+        Admin Dashboard
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

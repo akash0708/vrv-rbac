@@ -35,9 +35,12 @@ export default withAuth(
     callbacks: {
       authorized: ({ token }) => !!token,
     },
+    pages: {
+      signIn: "/login", // Redirect unauthorized users to /login
+    },
   }
 );
 
 export const config = {
-  matcher: ["/admin", "/superadmin"],
+  matcher: ["/admin", "/superadmin", "/register"],
 };

@@ -1,4 +1,3 @@
-// /app/superadmin/page.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -29,13 +28,20 @@ import {
 import { Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-const SuperAdminPage = () => {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [newRole, setNewRole] = useState("");
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: "USER" | "ADMIN" | "SUPERADMIN";
+  isBlocked: boolean;
+}
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+const SuperAdminPage: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [newRole, setNewRole] = useState<string>("");
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -47,7 +53,7 @@ const SuperAdminPage = () => {
     fetchUsers();
   }, []);
 
-  const handleEdit = (user) => {
+  const handleEdit = (user: User) => {
     setSelectedUser(user);
     setNewRole(user.role);
     setDialogOpen(true);
@@ -75,7 +81,7 @@ const SuperAdminPage = () => {
     setSelectedUser(null);
   };
 
-  const toggleBlockUser = async (id, isBlocked) => {
+  const toggleBlockUser = async (id: string, isBlocked: boolean) => {
     await fetch(`/api/users/${id}/block`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -88,14 +94,7 @@ const SuperAdminPage = () => {
     );
   };
 
-  // const deleteUser = async (id) => {
-  //   await fetch(`/api/users/${id}`, { method: "DELETE" });
-
-  //   // Refresh user list
-  //   setUsers(users.filter((user) => user.id !== id));
-  // };
-
-  const handleDelete = (user) => {
+  const handleDelete = (user: User) => {
     setSelectedUser(user);
     setDeleteDialogOpen(true);
   };
@@ -117,8 +116,9 @@ const SuperAdminPage = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Superadmin Dashboard</h1>
-
+      <h1 className="max-w-3xl mb-4 bg-gradient-to-br from-white to-gray-400 bg-clip-text text-3xl font-medium leading-tight text-transparent sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight">
+        Superadmin Dashboard
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <Card>
           <CardHeader>
