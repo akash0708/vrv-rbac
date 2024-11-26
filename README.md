@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Role-Based Access Control (RBAC)
 
-## Getting Started
+## Project Overview
 
-First, run the development server:
+This project is a **Role-Based Access Control (RBAC) Dashboard** designed to manage user roles and permissions effectively. It features three types of users: **Superadmin**, **Admin**, and **User**, each with specific privileges:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Superadmin**:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  - Manage all users (edit roles, block/unblock, delete).
+  - Promote/demote users to/from Admin.
+  - Full control over the system.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Admin**:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+  - Approve or reject user applications.
+  - View and manage user statuses (but cannot manage other Admins or Superadmins).
 
-## Learn More
+- **User**:
+  - Register and participate in events or activities.
+  - Limited access to application features.
 
-To learn more about Next.js, take a look at the following resources:
+### Key Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **User Management**:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   - View a list of all users with their details (name, email, role, status).
+   - Promote/demote users between roles (e.g., User → Admin).
+   - Block or unblock users.
 
-## Deploy on Vercel
+2. **Access Control**:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   - Implement fine-grained role-based access control to restrict actions based on roles.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Dynamic Role Updates**:
+
+   - Update roles dynamically with instant UI feedback.
+
+4. **Real-Time Notifications**:
+
+   - Visual feedback for actions like role updates or user blocking.
+
+5. **Scalable Architecture**:
+   - Built with modern technologies including **Next.js**, **Prisma**, and **NeonDB** for seamless performance and scalability.
+
+## Technologies Used
+
+### Frontend
+
+- **Next.js**:  
+  Utilized for building a fast and efficient React-based frontend with server-side rendering (SSR) and static site generation (SSG).
+- **Shadcn Components**:  
+  For creating accessible, customizable, and reusable UI components that ensure consistency across the application.
+- **Tailwind CSS**:  
+  A utility-first CSS framework for styling, enabling rapid and responsive UI development.
+- **Aceternity UI**:  
+  Integrated to provide clean and modern and performant animations to bring the website to life.
+
+### Backend
+
+- **Prisma**:  
+  ORM used to manage database schemas and streamline data access.
+- **PostgreSQL (via NeonDB)**:  
+  A robust relational database for storing and managing application data efficiently.
+
+### Demostration
+
+1. **Landing Page** : Animated with Framer Motion to produce an aurora effect. Click on the **Sign up now** button to create your account.
+
+![alt text](https://asset.cloudinary.com/dybvod0l2/fb3d813d34150bf397e3e5ed20d6e45e)
+
+2. **Sign Up/ Login** : Fill out the credentials to create a new account or head to the login page.
+
+![alt text](image-2.png)
+
+3. **Profile Page**: Upon being authenticated, you will reach the profile page. Click on the **Register button** or find your way around with the **Floating Dock**
+
+![alt text](image-3.png)
+
+4. **Floating Dock** :
+
+![alt text](image-4.png)
+
+5. **Register Page**: Register for the event you want to attend from the dropdown and get notified instantly. Wait for the admin to accept or reject your application.
+
+![alt text](image-5.png)
+
+6. **Admin Dashboard**: Checkout all the applications, review them and then either accept or reject.Search for a particular applicaton.
+
+**Note: Only an admin or a superadmin will be able to access this page. Find the admin credentials in the email**
+
+![alt text](image-6.png)
+
+7. **Superadmin Dashboard** : Get the list of all users registered in the platorm. Block them, edit their roles by promoting or demoting them. The superadmin has the absolute control over the website.
+
+![alt text](image-7.png)
+
+**Note: Only a superadmin will be able to access this page. Find the superadmin credentials in the email**
