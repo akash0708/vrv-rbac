@@ -1,7 +1,13 @@
 "use client";
 
 import { FloatingDock } from "@/components/ui/floating-dock";
-import { HomeIcon, NotebookPen, UserRound } from "lucide-react";
+import {
+  HomeIcon,
+  NotebookPen,
+  SettingsIcon,
+  ShieldIcon,
+  UserRound,
+} from "lucide-react";
 import LogoutButton from "./LogoutButton";
 import { useSession } from "next-auth/react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
@@ -21,6 +27,7 @@ export default function FloatingDockDemo() {
   });
 
   const { data: session } = useSession();
+  console.log(session?.user.role);
   if (!session) return null;
 
   const links = [
@@ -51,6 +58,29 @@ export default function FloatingDockDemo() {
       href: "#",
     },
   ];
+
+  if (session?.user.role === "SUPERADMIN") {
+    const logoutIndex = links.findIndex((link) => link.title === "Logout");
+    links.splice(
+      logoutIndex,
+      0,
+      {
+        title: "Admin",
+        icon: (
+          <ShieldIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        ),
+        href: "/admin",
+      },
+      {
+        title: "Superadmin",
+        icon: (
+          <SettingsIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        ),
+        href: "/superadmin",
+      }
+    );
+  }
+
   return (
     <motion.div
       variants={{

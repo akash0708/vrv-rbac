@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from "./ui/hero-highlight";
+import { useRouter } from "next/navigation";
 
 interface ProfileProps {
   user: {
@@ -13,6 +14,7 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({ user }) => {
+  const router = useRouter();
   return (
     // <div className="p-6 border rounded-lg shadow-md w-full max-w-md">
     //   <h2 className="text-xl font-semibold mb-4">User Profile</h2>
@@ -57,6 +59,17 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
           {user.name}
         </Highlight>
       </motion.h1>
+      <div className="w-screen h-[8rem] mt-7 flex flex-col justify-center items-center">
+        <button
+          onClick={() => router.push("/register")}
+          className="p-[3px] relative"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
+          <div className="px-8 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
+            Register
+          </div>
+        </button>
+      </div>
     </HeroHighlight>
   );
 };
