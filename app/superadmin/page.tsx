@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -38,6 +39,8 @@ interface User {
 
 const SuperAdminPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [newRole, setNewRole] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -48,10 +51,18 @@ const SuperAdminPage: React.FC = () => {
       const res = await fetch("/api/users");
       const data = await res.json();
       setUsers(data);
+      setFilteredUsers(data);
     };
 
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    const filtered = users.filter((user) =>
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  }, [searchQuery, users]);
 
   const handleEdit = (user: User) => {
     setSelectedUser(user);
@@ -61,7 +72,7 @@ const SuperAdminPage: React.FC = () => {
 
   const handleRoleChange = async () => {
     if (selectedUser) {
-      console.log("newRole", newRole);
+      // console.log("newRole", newRole);
       const response = await fetch(`/api/users/${selectedUser.id}/role`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -147,6 +158,17 @@ const SuperAdminPage: React.FC = () => {
         </Card>
       </div>
 
+      <div className="w-full h-fit flex flex-col md:flex-row justify-between md:items-center gap-3 my-4">
+        <h2 className="text-xl font-semibold my-4">All Users:</h2>
+        <Input
+          type="text"
+          placeholder="Search by email"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full md:w-1/3 mb-2"
+        />
+      </div>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -159,7 +181,7 @@ const SuperAdminPage: React.FC = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <TableRow key={user.id}>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>

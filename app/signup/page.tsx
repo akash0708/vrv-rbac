@@ -90,8 +90,7 @@ export default function SignUpPage() {
       router.push("/dashboard");
     } catch (err) {
       setLoading(false);
-      console.log(err);
-      setError("Something went wrong!");
+      setError("Something went wrong!", err);
     }
   };
 

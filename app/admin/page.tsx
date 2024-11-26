@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 
 interface User {
   id: string;
@@ -36,6 +37,10 @@ interface EventCount {
 
 const Admin: React.FC = () => {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
+  const [filteredRegistrations, setFilteredRegistrations] = useState<
+    Registration[]
+  >([]);
+  const [searchEmail, setSearchEmail] = useState<string>("");
   const [totalCount, setTotalCount] = useState<number>(0);
   const [perEventCounts, setPerEventCounts] = useState<EventCount[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -48,6 +53,7 @@ const Admin: React.FC = () => {
 
         if (res.ok) {
           setRegistrations(data.registrations);
+          setFilteredRegistrations(data.registrations);
           setTotalCount(data.totalCount);
           setPerEventCounts(data.perEventCounts);
         } else {
@@ -61,7 +67,7 @@ const Admin: React.FC = () => {
     };
     fetchRegistrations();
   }, []);
-  console.log("registrations", registrations);
+  // console.log("registrations", registrations);
 
   const handleStatusChange = async (
     id: string,
@@ -76,8 +82,13 @@ const Admin: React.FC = () => {
 
       if (res.ok) {
         const updatedRegistration = await res.json();
-        console.log("updatedRegistration", updatedRegistration);
+        // console.log("updatedRegistration", updatedRegistration);
         setRegistrations((prev) =>
+          prev.map((reg) =>
+            reg.id === updatedRegistration.id ? updatedRegistration : reg
+          )
+        );
+        setFilteredRegistrations((prev) =>
           prev.map((reg) =>
             reg.id === updatedRegistration.id ? updatedRegistration : reg
           )
@@ -87,6 +98,19 @@ const Admin: React.FC = () => {
       }
     } catch (error) {
       console.error("Error updating status:", error);
+    }
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value.toLowerCase();
+    setSearchEmail(query);
+    if (query.trim() === "") {
+      setFilteredRegistrations(registrations);
+    } else {
+      const filtered = registrations.filter((reg) =>
+        reg.user.email.toLowerCase().includes(query)
+      );
+      setFilteredRegistrations(filtered);
     }
   };
 
@@ -122,7 +146,16 @@ const Admin: React.FC = () => {
       </div>
 
       <div className="my-4 py-4">
-        <h2 className="text-xl font-semibold my-4">All Registrations:</h2>
+        <div className="w-full h-fit flex flex-col md:flex-row justify-between md:items-center gap-3 my-4">
+          <h2 className="text-xl font-semibold my-4">All Registrations:</h2>
+          <Input
+            type="text"
+            placeholder="Search by email"
+            value={searchEmail}
+            onChange={handleSearch}
+            className="w-full md:w-1/3 mb-2"
+          />
+        </div>
         <Table>
           <TableHeader>
             <TableRow>
@@ -136,45 +169,55 @@ const Admin: React.FC = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {registrations.map((reg) => (
-              <TableRow key={reg.id}>
-                <TableCell>{reg.user.id}</TableCell>
-                <TableCell>{reg.user.name}</TableCell>
-                <TableCell>{reg.user.email}</TableCell>
-                <TableCell>{reg.eventName}</TableCell>
-                <TableCell>
-                  {reg.status === "PENDING" && (
-                    <Badge className="bg-yellow-600">Pending</Badge>
-                  )}
-                  {reg.status === "APPROVED" && (
-                    <Badge className="bg-emerald-700">Approved</Badge>
-                  )}
-                  {reg.status === "REJECTED" && (
-                    <Badge variant={"destructive"}>Rejected</Badge>
-                  )}
+            {filteredRegistrations.length > 0 ? (
+              filteredRegistrations.map((reg) => (
+                <TableRow key={reg.id}>
+                  <TableCell>{reg.user.id}</TableCell>
+                  <TableCell>{reg.user.name}</TableCell>
+                  <TableCell>{reg.user.email}</TableCell>
+                  <TableCell>{reg.eventName}</TableCell>
+                  <TableCell>
+                    {reg.status === "PENDING" && (
+                      <Badge className="bg-yellow-600">Pending</Badge>
+                    )}
+                    {reg.status === "APPROVED" && (
+                      <Badge className="bg-emerald-700 hover:bg-emerald-800">
+                        Approved
+                      </Badge>
+                    )}
+                    {reg.status === "REJECTED" && (
+                      <Badge variant={"destructive"}>Rejected</Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {reg.status === "PENDING" && (
+                      <>
+                        <Button
+                          className="mr-2 bg-green-500 hover:bg-green-600 text-white"
+                          onClick={() => handleStatusChange(reg.id, "APPROVED")}
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          onClick={() => handleStatusChange(reg.id, "REJECTED")}
+                          className="bg-red-500 bg-red-600 text-white"
+                        >
+                          Reject
+                        </Button>
+                      </>
+                    )}
+                    {reg.status !== "PENDING" && <span>Action Completed</span>}
+                  </TableCell>
+                  <td>{new Date(reg.createdAt).toLocaleString()}</td>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center">
+                  No registrations found.
                 </TableCell>
-                <TableCell>
-                  {reg.status === "PENDING" && (
-                    <>
-                      <Button
-                        className="mr-2 bg-green-500 text-white"
-                        onClick={() => handleStatusChange(reg.id, "APPROVED")}
-                      >
-                        Approve
-                      </Button>
-                      <Button
-                        onClick={() => handleStatusChange(reg.id, "REJECTED")}
-                        className="bg-red-500 text-white"
-                      >
-                        Reject
-                      </Button>
-                    </>
-                  )}
-                  {reg.status !== "PENDING" && <span>Action Completed</span>}
-                </TableCell>
-                <td>{new Date(reg.createdAt).toLocaleString()}</td>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
