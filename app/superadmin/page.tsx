@@ -26,6 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 import { Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
@@ -45,6 +46,7 @@ const SuperAdminPage: React.FC = () => {
   const [newRole, setNewRole] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -105,8 +107,15 @@ const SuperAdminPage: React.FC = () => {
   };
 
   const handleDelete = (user: User) => {
-    setSelectedUser(user);
-    setDeleteDialogOpen(true);
+    if (user.role === "SUPERADMIN") {
+      toast({
+        description: "Cannot delete superadmin",
+        variant: "destructive",
+      });
+    } else {
+      setSelectedUser(user);
+      setDeleteDialogOpen(true);
+    }
   };
 
   const confirmDelete = async () => {
@@ -116,6 +125,10 @@ const SuperAdminPage: React.FC = () => {
     }
     setDeleteDialogOpen(false);
     setSelectedUser(null);
+    toast({
+      description: "User deleted",
+      variant: "destructive",
+    });
   };
 
   const totalUsers = users.length;

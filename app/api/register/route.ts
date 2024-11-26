@@ -32,7 +32,10 @@ export async function POST(req: Request) {
     }
 
     if (user.isBlocked) {
-      return NextResponse.json({ error: "User is blocked" }, { status: 403 });
+      return NextResponse.json(
+        { error: "You have been blocked" },
+        { status: 403 }
+      );
     }
 
     const existingRegistration = await prisma.registration.findFirst({

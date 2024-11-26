@@ -55,6 +55,7 @@ export default function HomePage() {
 
       toast({
         description: `Registration successful for event: ${registration.eventName}`,
+        variant: "destructive",
       });
     } catch (error) {
       setMessage(error.message || "An error occurred");
