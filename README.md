@@ -1,5 +1,9 @@
 # Role-Based Access Control (RBAC)
 
+The project is live at: [https://vrv-rbac-vert.vercel.app](https://vrv-rbac-vert.vercel.app//)
+
+To run the Project locally checkout [INSTALLATION.md](./INSTALLATION.md)
+
 ## Project Overview
 
 This project is a **Role-Based Access Control (RBAC) Dashboard** designed to manage user roles and permissions effectively. It features three types of users: **Superadmin**, **Admin**, and **User**, each with specific privileges:
@@ -95,3 +99,9 @@ This project is a **Role-Based Access Control (RBAC) Dashboard** designed to man
 ![alt text](image-7.png)
 
 **Note: Only a superadmin will be able to access this page. Find the superadmin credentials in the email**
+
+## Future plans
+
+While the current implementation of the project provides basic roles (User, Admin, and Superadmin), there are plans to expand the functionality to allow for more flexibility in role management.
+
+One of the main features to be added is the ability to create and manage custom roles. This will allow administrators or superadmins to define roles with specific permissions tailored to the needs of the organization.
