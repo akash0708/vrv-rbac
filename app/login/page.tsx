@@ -16,16 +16,40 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import BeamsWithCollision from "@/components/CollidingBeams";
 import Link from "next/link";
+import Loader from "@/components/Loader";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setEmailError("");
+    setPasswordError("");
+
+    if (!email && !password) {
+      setEmailError("Email is required");
+      setPasswordError("Password is required");
+      return;
+    }
+
+    if (!email) {
+      setEmailError("Email is required");
+      return;
+    }
+
+    if (!password) {
+      setPasswordError("Password is required");
+      return;
+    }
+
+    setLoading(true);
 
     const result = await signIn("credentials", {
       email,
@@ -35,7 +59,9 @@ export default function LoginPage() {
 
     if (result?.error) {
       setError(result.error);
+      setLoading(false);
     } else {
+      setLoading(false);
       router.push("/dashboard");
     }
   };
@@ -66,7 +92,11 @@ export default function LoginPage() {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className={emailError ? "border-red-500" : ""}
                 />
+                {emailError && (
+                  <p className="text-sm text-red-500">{emailError}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
@@ -76,10 +106,20 @@ export default function LoginPage() {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className={passwordError ? "border-red-500" : ""}
                 />
+                {passwordError && (
+                  <p className="text-sm text-red-500">{passwordError}</p>
+                )}
               </div>
-              <Button type="submit" className="w-full">
-                Log In
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? (
+                  <span className="flex flex-row gap-3">
+                    <Loader /> Logging in...
+                  </span>
+                ) : (
+                  "Log In"
+                )}
               </Button>
             </form>
           </CardContent>

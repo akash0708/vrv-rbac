@@ -15,6 +15,11 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         const { email, password } = credentials || {};
+
+        if (!email || !password) {
+          throw new Error("All fields are required");
+        }
+
         const user = await prisma.user.findUnique({ where: { email } });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -35,7 +40,7 @@ export const authOptions: AuthOptions = {
     error: "/login",
   },
   session: {
-    strategy: "jwt", // Use the correct type
+    strategy: "jwt",
   },
   callbacks: {
     async jwt({ token, user }) {

@@ -5,6 +5,13 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const { name, email, password } = await req.json();
 
+  if (!name || !email || !password) {
+    return NextResponse.json(
+      { error: "All fields are required" },
+      { status: 400 }
+    );
+  }
+
   const existingUser = await prisma.user.findUnique({ where: { email } });
   if (existingUser) {
     return NextResponse.json(

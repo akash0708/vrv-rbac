@@ -18,19 +18,51 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import BeamsWithCollision from "@/components/CollidingBeams";
 import Link from "next/link";
+import Loader from "@/components/Loader";
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setEmailError("");
+    setPasswordError("");
+    setNameError("");
+
+    if (!name && !email && !password) {
+      setNameError("Name is required");
+      setEmailError("Email is required");
+      setPasswordError("Password is required");
+      return;
+    }
+
+    if (!email) {
+      setEmailError("Email is required");
+      return;
+    }
+
+    if (!password) {
+      setPasswordError("Password is required");
+      return;
+    }
+
+    if (!name) {
+      setNameError("Name is required");
+      return;
+    }
 
     try {
+      setLoading(true);
+
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -54,8 +86,10 @@ export default function SignUpPage() {
         return;
       }
 
+      setLoading(false);
       router.push("/dashboard");
     } catch (err) {
+      setLoading(false);
       console.log(err);
       setError("Something went wrong!");
     }
@@ -87,7 +121,11 @@ export default function SignUpPage() {
                   placeholder="Enter your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  className={nameError ? "border-red-500" : ""}
                 />
+                {nameError && (
+                  <p className="text-sm text-red-500">{nameError}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -97,7 +135,11 @@ export default function SignUpPage() {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className={emailError ? "border-red-500" : ""}
                 />
+                {emailError && (
+                  <p className="text-sm text-red-500">{emailError}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
@@ -107,10 +149,20 @@ export default function SignUpPage() {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className={passwordError ? "border-red-500" : ""}
                 />
+                {passwordError && (
+                  <p className="text-sm text-red-500">{passwordError}</p>
+                )}
               </div>
-              <Button type="submit" className="w-full">
-                Sign Up
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? (
+                  <span className="flex flex-row gap-3">
+                    <Loader /> Signing Up...
+                  </span>
+                ) : (
+                  "Sign Up"
+                )}
               </Button>
             </form>
           </CardContent>
