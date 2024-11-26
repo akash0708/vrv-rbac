@@ -66,7 +66,7 @@ This project is a **Role-Based Access Control (RBAC) Dashboard** designed to man
 
 1. **Landing Page** : Animated with Framer Motion to produce an aurora effect. Click on the **Sign up now** button to create your account.
 
-![alt text](https://asset.cloudinary.com/dybvod0l2/fb3d813d34150bf397e3e5ed20d6e45e)
+![alt text](image-1.png)
 
 2. **Sign Up/ Login** : Fill out the credentials to create a new account or head to the login page.
 
