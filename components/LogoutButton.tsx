@@ -6,8 +6,11 @@ import { LogOut } from "lucide-react";
 
 const LogoutButton = () => {
   return (
-    <Button className="" onClick={() => signOut({ callbackUrl: "/login" })}>
-      <LogOut className="w-6 h-6 rounded-full" />
+    <Button
+      className="w-9 h-9 rounded-full md:rounded-sm md:w-fit md:h-10"
+      onClick={() => signOut({ callbackUrl: "/login" })}
+    >
+      <LogOut className="w-5 h-5" />
     </Button>
   );
 };

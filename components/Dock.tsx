@@ -27,7 +27,6 @@ export default function FloatingDockDemo() {
   });
 
   const { data: session } = useSession();
-  console.log(session?.user.role);
   if (!session) return null;
 
   const links = [
@@ -81,6 +80,17 @@ export default function FloatingDockDemo() {
     );
   }
 
+  if (session?.user.role === "ADMIN") {
+    const logoutIndex = links.findIndex((link) => link.title === "Logout");
+    links.splice(logoutIndex, 0, {
+      title: "Admin",
+      icon: (
+        <ShieldIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "/admin",
+    });
+  }
+
   return (
     <motion.div
       variants={{
@@ -89,9 +99,9 @@ export default function FloatingDockDemo() {
       }}
       animate={hidden ? "hidden" : "visible"}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="fixed bottom-12 z-50 mx-auto flex items-center justify-center h-fit w-screen"
+      className="fixed bottom-12 z-50 md:mx-auto md:flex md:items-center md:justify-center h-fit md:w-screen"
     >
-      <FloatingDock mobileClassName="" items={links} />
+      <FloatingDock mobileClassName="fixed right-12 bottom-12" items={links} />
     </motion.div>
   );
 }
