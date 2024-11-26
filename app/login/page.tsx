@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
   Card,
   CardContent,
@@ -26,6 +27,18 @@ export default function LoginPage() {
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [status, router]);
+
+  if (status === "loading") {
+    return null;
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,6 +78,10 @@ export default function LoginPage() {
       router.push("/dashboard");
     }
   };
+
+  if (status === "authenticated") {
+    return null;
+  }
 
   return (
     <div className="flex h-screen">

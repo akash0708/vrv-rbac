@@ -2,9 +2,9 @@
 // @ts-nocheck
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import {
   Card,
   CardContent,
@@ -30,6 +30,18 @@ export default function SignUpPage() {
   const [nameError, setNameError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [status, router]);
+
+  if (status === "loading") {
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,6 +105,10 @@ export default function SignUpPage() {
       setError("Something went wrong!", err);
     }
   };
+
+  if (status === "authenticated") {
+    return null;
+  }
 
   return (
     <div className="flex h-screen">

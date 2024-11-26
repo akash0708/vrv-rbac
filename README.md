@@ -70,33 +70,33 @@ This project is a **Role-Based Access Control (RBAC) Dashboard** designed to man
 
 1. **Landing Page** : Animated with Framer Motion to produce an aurora effect. Click on the **Sign up now** button to create your account.
 
-![alt text](image-1.png)
+![alt text](./assets/image-1.png)
 
 2. **Sign Up/ Login** : Fill out the credentials to create a new account or head to the login page.
 
-![alt text](image-2.png)
+![alt text](./assets/image-2.png)
 
 3. **Profile Page**: Upon being authenticated, you will reach the profile page. Click on the **Register button** or find your way around with the **Floating Dock**
 
-![alt text](image-3.png)
+![alt text](./assets/image-3.png)
 
 4. **Floating Dock** :
 
-![alt text](image-4.png)
+![alt text](./assets/image-4.png)
 
 5. **Register Page**: Register for the event you want to attend from the dropdown and get notified instantly. Wait for the admin to accept or reject your application.
 
-![alt text](image-5.png)
+![alt text](./assets/image-5.png)
 
 6. **Admin Dashboard**: Checkout all the applications, review them and then either accept or reject.Search for a particular applicaton.
 
 **Note: Only an admin or a superadmin will be able to access this page. Find the admin credentials in the email**
 
-![alt text](image-6.png)
+![alt text](./assets/image-6.png)
 
 7. **Superadmin Dashboard** : Get the list of all users registered in the platorm. Block them, edit their roles by promoting or demoting them. The superadmin has the absolute control over the website.
 
-![alt text](image-7.png)
+![alt text](./assets/image-7.png)
 
 **Note: Only a superadmin will be able to access this page. Find the superadmin credentials in the email**
 

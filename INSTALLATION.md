@@ -23,7 +23,7 @@ cd vrv-rbac
 ```bash
 npm install
 
-# if it doesn't work, since a lot of dependencies are not compatible with Next.js v15
+# if npm install doesn't work, try this since a lot of dependencies are not compatible with Next.js v15
 npm install --legacy-peer-deps
 ```
 

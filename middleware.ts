@@ -3,15 +3,7 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   async function middleware(request) {
-    console.log(request.nextUrl.pathname); // Logs the requested path
-
-    // if (
-    //   request.nextUrl.pathname.startsWith("/login") ||
-    //   request.nextUrl.pathname.startsWith("/signup")
-    // ) {
-    //   const redirectUrl = request.headers.get("referer") || "/";
-    //   return NextResponse.redirect(new URL(redirectUrl, request.url));
-    // }
+    // console.log(request.nextUrl.pathname);
 
     if (request.nextUrl.pathname.startsWith("/admin")) {
       if (
@@ -36,11 +28,11 @@ export default withAuth(
       authorized: ({ token }) => !!token,
     },
     pages: {
-      signIn: "/login", // Redirect unauthorized users to /login
+      signIn: "/login",
     },
   }
 );
 
 export const config = {
-  matcher: ["/admin", "/superadmin", "/register"],
+  matcher: ["/admin", "/superadmin", "/register", "/dashboard"],
 };
