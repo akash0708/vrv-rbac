@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import BeamsWithCollision from "@/components/CollidingBeams";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import Loader from "@/components/Loader";
 
 export default function LoginPage() {

@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import SessionWrapper from "@/components/SessionWrapper";
 import FloatingDockDemo from "@/components/Dock";
 import { Toaster } from "@/components/ui/toaster";
+import { ViewTransitions } from "next-view-transitions";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,21 +24,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable}`}>
-      <body className={`${poppins.className} no-scrollbar antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <SessionWrapper>
-            <FloatingDockDemo />
-            {children}
-            <Toaster />
-          </SessionWrapper>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en" className={`${poppins.variable}`}>
+        <body className={`${poppins.className} no-scrollbar antialiased`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <SessionWrapper>
+              <FloatingDockDemo />
+              {children}
+              <Toaster />
+            </SessionWrapper>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

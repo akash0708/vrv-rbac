@@ -10,7 +10,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { useRef, useState } from "react";
 
 export const FloatingDock = ({

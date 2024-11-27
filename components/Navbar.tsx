@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { ModeToggle } from "./ui/mode-toggle";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
