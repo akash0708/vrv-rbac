@@ -1,7 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from "./ui/hero-highlight";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -11,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Link } from "next-view-transitions";
 
 interface ProfileProps {
   user: {
@@ -30,8 +30,8 @@ interface Registration {
 }
 
 const Profile: React.FC<ProfileProps> = ({ user }) => {
-  const router = useRouter();
   const [registrations, setRegistrations] = useState<Registration[]>([]);
+
   useEffect(() => {
     const fetchRegistrations = async () => {
       const res = await fetch(`/api/users/${user.id}`);
@@ -40,8 +40,8 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
     };
 
     fetchRegistrations();
-  }, []);
-  console.log("registrations", registrations);
+  }, [user.id]);
+
   return (
     <HeroHighlight>
       <motion.h1
@@ -68,8 +68,8 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-left">Event Name</TableHead>
-              <TableHead className="text-left">Status</TableHead>
+              <TableHead>Event Name</TableHead>
+              <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -95,15 +95,12 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
         </Table>
       </div>
       <div className="w-screen h-[8rem] mt-7 flex flex-col justify-center items-center">
-        <button
-          onClick={() => router.push("/register")}
-          className="p-[3px] relative"
-        >
+        <Link href="/register" className="p-[3px] relative">
           <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
           <div className="px-8 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
             Register
           </div>
-        </button>
+        </Link>
       </div>
     </HeroHighlight>
   );
