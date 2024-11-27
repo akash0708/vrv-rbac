@@ -19,6 +19,20 @@ export async function PUT(
   const { newRole } = await request.json();
 
   // console.log("newRole", newRole);
+  const userBeingUpdated = await prisma.user.findUnique({
+    where: { id: parseInt((await params).id) },
+  });
+
+  if (!userBeingUpdated) {
+    return NextResponse.json({ message: "User not found." }, { status: 404 });
+  }
+
+  if (userBeingUpdated.role === "SUPERADMIN") {
+    return NextResponse.json(
+      { message: "Cannot update the role of a SUPERADMIN." },
+      { status: 403 }
+    );
+  }
 
   const updatedUser = await prisma.user.update({
     where: { id: parseInt((await params).id) },
