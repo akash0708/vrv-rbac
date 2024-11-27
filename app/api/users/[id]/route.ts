@@ -33,3 +33,33 @@ export async function DELETE(
 
   return NextResponse.json({ message: "User deleted successfully" });
 }
+
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+
+    const userRegistrations = await prisma.registration.findMany({
+      where: { userId: parseInt((await params).id) },
+      select: {
+        id: true,
+        eventName: true,
+        status: true,
+      },
+    });
+
+    return NextResponse.json(userRegistrations);
+  } catch (error) {
+    console.error("Error fetching user registrations:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch user registrations" },
+      { status: 500 }
+    );
+  }
+}

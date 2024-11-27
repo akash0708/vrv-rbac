@@ -52,44 +52,58 @@ export default function FloatingDockDemo() {
       href: "/dashboard",
     },
     {
+      title: "Admin",
+      icon: (
+        <ShieldIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "/admin",
+    },
+    {
+      title: "Superadmin",
+      icon: (
+        <SettingsIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "/superadmin",
+    },
+    {
       title: "Logout",
       icon: <LogoutButton />,
       href: "#",
     },
   ];
 
-  if (session?.user.role === "SUPERADMIN") {
-    const logoutIndex = links.findIndex((link) => link.title === "Logout");
-    links.splice(
-      logoutIndex,
-      0,
-      {
-        title: "Admin",
-        icon: (
-          <ShieldIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-        ),
-        href: "/admin",
-      },
-      {
-        title: "Superadmin",
-        icon: (
-          <SettingsIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-        ),
-        href: "/superadmin",
-      }
-    );
-  }
+  // if (session?.user.role === "SUPERADMIN") {
+  //   const logoutIndex = links.findIndex((link) => link.title === "Logout");
+  //   links.splice(
+  //     logoutIndex,
+  //     0,
+  //     {
+  //       title: "Admin",
+  //       icon: (
+  //         <ShieldIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+  //       ),
+  //       href: "/admin",
+  //     },
+  //     {
+  //       title: "Superadmin",
+  //       icon: (
+  //         <SettingsIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+  //       ),
+  //       href: "/superadmin",
+  //     }
+  //   );
+  // }
 
-  if (session?.user.role === "ADMIN") {
-    const logoutIndex = links.findIndex((link) => link.title === "Logout");
-    links.splice(logoutIndex, 0, {
-      title: "Admin",
-      icon: (
-        <ShieldIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "/admin",
-    });
-  }
+  // if (session?.user.role === "ADMIN") {
+  //   const logoutIndex = links.findIndex((link) => link.title === "Logout");
+  //   links.splice(logoutIndex, 0, {
+  //     title: "Admin",
+  //     icon: (
+  //       <ShieldIcon className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+  //     ),
+  //     href: "/admin",
+  //   });
+  // }
 
   return (
     <motion.div

@@ -2,9 +2,19 @@
 import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from "./ui/hero-highlight";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface ProfileProps {
   user: {
+    id: string;
     name: string;
     email: string;
     role: string;
@@ -13,31 +23,26 @@ interface ProfileProps {
   };
 }
 
+interface Registration {
+  eventName: string;
+  id: number;
+  status: string;
+}
+
 const Profile: React.FC<ProfileProps> = ({ user }) => {
   const router = useRouter();
+  const [registrations, setRegistrations] = useState<Registration[]>([]);
+  useEffect(() => {
+    const fetchRegistrations = async () => {
+      const res = await fetch(`/api/users/${user.id}`);
+      const registrations = await res.json();
+      setRegistrations(registrations);
+    };
+
+    fetchRegistrations();
+  }, []);
+  console.log("registrations", registrations);
   return (
-    // <div className="p-6 border rounded-lg shadow-md w-full max-w-md">
-    //   <h2 className="text-xl font-semibold mb-4">User Profile</h2>
-    //   <ul className="space-y-2">
-    //     <li>
-    //       <strong>Name:</strong> {user.name}
-    //     </li>
-    //     <li>
-    //       <strong>Email:</strong> {user.email}
-    //     </li>
-    //     <li>
-    //       <strong>Role:</strong> {user.role}
-    //     </li>
-    //     <li>
-    //       <strong>Joined At:</strong>{" "}
-    //       {new Date(user.createdAt).toLocaleDateString()}
-    //     </li>
-    //     <li>
-    //       <strong>Last Updated:</strong>{" "}
-    //       {new Date(user.updatedAt).toLocaleDateString()}
-    //     </li>
-    //   </ul>
-    // </div>
     <HeroHighlight>
       <motion.h1
         initial={{
@@ -59,6 +64,36 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
           {user.name}
         </Highlight>
       </motion.h1>
+      <div className="max-w-sm md:max-w-lg mx-auto mt-12">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="text-left">Event Name</TableHead>
+              <TableHead className="text-left">Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {registrations.map((registration) => (
+              <TableRow key={registration.id}>
+                <TableCell>{registration.eventName}</TableCell>
+                <TableCell>
+                  <span
+                    className={`px-2 py-1 rounded-full ${
+                      registration.status === "APPROVED"
+                        ? "bg-green-100 text-green-700"
+                        : registration.status === "PENDING"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {registration.status}
+                  </span>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
       <div className="w-screen h-[8rem] mt-7 flex flex-col justify-center items-center">
         <button
           onClick={() => router.push("/register")}

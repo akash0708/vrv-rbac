@@ -10,7 +10,7 @@ export default withAuth(
         request.nextauth.token?.role !== "ADMIN" &&
         request.nextauth.token?.role !== "SUPERADMIN"
       ) {
-        return NextResponse.rewrite(new URL("/", request.url));
+        return NextResponse.rewrite(new URL("/hello", request.url));
         // console.log(request.nextauth.token?.role);
       }
     }
@@ -19,7 +19,7 @@ export default withAuth(
       if (request.nextauth.token?.role !== "SUPERADMIN") {
         console.log(request.nextauth.token?.role);
         console.log(request.nextUrl.pathname);
-        return NextResponse.rewrite(new URL("/", request.url));
+        return NextResponse.rewrite(new URL("/hello", request.url));
       }
     }
   },
