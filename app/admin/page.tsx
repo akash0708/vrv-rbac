@@ -193,14 +193,14 @@ const Admin: React.FC = () => {
                     {reg.status === "PENDING" && (
                       <>
                         <Button
-                          className="mr-2 bg-green-500 hover:bg-green-600 text-white"
+                          className="mr-2 bg-green-500 hover:bg-green-600 text-white mb-3 md:mb-0"
                           onClick={() => handleStatusChange(reg.id, "APPROVED")}
                         >
                           Approve
                         </Button>
                         <Button
                           onClick={() => handleStatusChange(reg.id, "REJECTED")}
-                          className="bg-red-500 bg-red-600 text-white"
+                          className="bg-red-600 text-white"
                         >
                           Reject
                         </Button>

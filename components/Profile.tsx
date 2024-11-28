@@ -65,34 +65,36 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
         </Highlight>
       </motion.h1>
       <div className="max-w-sm md:max-w-lg mx-auto mt-12">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Event Name</TableHead>
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {registrations.map((registration) => (
-              <TableRow key={registration.id}>
-                <TableCell>{registration.eventName}</TableCell>
-                <TableCell>
-                  <span
-                    className={`px-2 py-1 rounded-full ${
-                      registration.status === "APPROVED"
-                        ? "bg-green-100 text-green-700"
-                        : registration.status === "PENDING"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {registration.status}
-                  </span>
-                </TableCell>
+        {registrations.length != 0 && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Event Name</TableHead>
+                <TableHead>Status</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {registrations.map((registration) => (
+                <TableRow key={registration.id}>
+                  <TableCell>{registration.eventName}</TableCell>
+                  <TableCell>
+                    <span
+                      className={`px-2 py-1 rounded-full ${
+                        registration.status === "APPROVED"
+                          ? "bg-green-100 text-green-700"
+                          : registration.status === "PENDING"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {registration.status}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
       <div className="w-screen h-[8rem] mt-7 flex flex-col justify-center items-center">
         <Link href="/register" className="p-[3px] relative">
